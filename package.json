@@ -1,0 +1,18 @@
+{
+   "name": "cpoe",
+   "version": "1.0.0",
+   "main": "index.js",
+   "scripts": {
+      "start": "node index.js",
+      "dev": "node --watch index.js"
+   },
+   "keywords": [],
+   "author": "Kevin Huanca",
+   "license": "ISC",
+   "description": "",
+   "dependencies": {
+      "express": "4.19.2",
+      "mysql2": "3.10.1",
+      "pug": "3.0.3"
+   }
+}
