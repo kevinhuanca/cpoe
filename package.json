@@ -4,15 +4,17 @@
    "main": "index.js",
    "type": "module",
    "scripts": {
-      "start": "node app.js",
-      "dev": "node --watch app.js"
+      "start": "node index.js",
+      "dev": "node --watch index.js"
    },
    "keywords": [],
    "author": "Kevin Huanca",
    "license": "ISC",
    "description": "",
    "dependencies": {
+      "bcrypt": "5.1.1",
       "express": "4.19.2",
+      "express-session": "1.18.0",
       "mysql2": "3.10.1",
       "pug": "3.0.3"
    }
