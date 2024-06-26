@@ -14,7 +14,7 @@ export class UsuarioController {
       const { nombre, clave } = req.body;
       const claveHasheada = await bcrypt.hash(clave, 10);
       const usuario = await UsuarioModel.registrarUsuario(nombre, claveHasheada, 2);
-      if (usuario) return res.json({ message: 'Usuario registrado exitosamente' });
+      if (usuario) return res.json({ message: 'Usuario registrado exitosamente', idUsuario: usuario });
       res.status(500).json({ message: 'Error al registrar el usuario' });
    }
 

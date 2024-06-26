@@ -1,0 +1,29 @@
+include nav-admin.pug
+
+.container.mt-4
+   .row
+      .col-md-6
+         form#formu(action="", method="post")
+            h2.mb-4 Agregar prestación
+
+            .mb-3
+               label.form-label(for="") Nombre de la prestación:
+               input#prestacionInput.form-control(type="text", placeholder="Prestación", oninput="validarInput('#prestacionInput', '#agregarPrestacion')")
+
+            .mb-4
+               button#agregarPrestacion.btn.btn-success(type="button" disabled) Agregar
+
+      .col-md-6
+         h2.mb-4 Listado de prestaciones
+
+         .mb-3
+            label.form-label(for="") Buscar: 
+            input#buscarPrestacion.form-control(type="text", placeholder="Buscar prestación por nombre")
+
+         .mb-4
+            #prestacionesInfo
+               each prestacion in prestaciones
+                  .alert.alert-success.mb-1(role="alert", data-id=prestacion.id)
+                     | #{prestacion.nombre}
+
+script(src="./js/prestacion.js") 

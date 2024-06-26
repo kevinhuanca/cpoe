@@ -1,0 +1,56 @@
+include nav-admin.pug
+
+.container.mt-4
+   .row
+      .col-md-6
+         form#formu(action="", method="post")
+            h2.mb-4 Agregar profesional
+
+            .mb-3 
+               label.form-label(for="") Nombre:
+               input#nombreInput.form-control(type="text", placeholder="Ej: Pablo")
+            .mb-3
+               label.form-label(for="") Apellido:
+               input#apellidoInput.form-control(type="text", placeholder="Ej: Lopez")
+            .mb-3
+               label.form-label(for="") Documento:
+               input#documentoInput.form-control(type="number", placeholder="Ej: 34343434")
+            .mb-3
+               label.form-label(for="") Domicilio:
+               input#domicilioInput.form-control(type="text", placeholder="Ej: Calle 123")
+            .mb-3
+               label.form-label(for="") Profesion:
+               select#profesionSelect.form-select
+                  option(value="0") Seleccione una profesión
+                  each profesion in profesiones
+                     option(value=profesion.id) #{profesion.nombre}
+            .mb-3
+               label.form-label(for="") Especialidad: 
+               select#especialidadSelect.form-select
+                  option(value="0") Seleccione una especialidad
+            .mb-3
+               label.form-label(for="") Matricula:
+               input#matriculaInput.form-control(type="number", placeholder="Ej: 54321")
+            .mb-3
+               label.form-label(for="") Refeps:
+               input#refepsInput.form-control(type="number", placeholder="Ej: 12345")
+            .mb-3
+               p *Una vez agregado el profesional, se genera un nuevo usuario y contraseña con el documento del mismo.
+            
+            .mb-4
+               button#agregarProfesional.btn.btn-success(type="button") Agregar
+
+      .col-md-6
+         h2.mb-4 Listado de profesionales
+
+         .mb-3
+            label.form-label(for="") Buscar:
+            input#buscarProfesional.form-control(type="number", placeholder="Buscar profesional por DNI")
+
+         .mb-4 
+            #profesionalesInfo
+               each profesional in profesionales
+                  .alert.alert-success.mb-1(role="alert", data-id=profesional.id)
+                     | #{profesional.documento} | #{profesional.apellido}, #{profesional.nombre} | #{profesional.profesion} | #{profesional.especialidad}
+
+script(src="./js/profesional.js") 

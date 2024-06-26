@@ -1,0 +1,43 @@
+include nav-admin.pug
+
+.container.mt-4
+   .row
+      .col-md-6
+         form#formu(action="", method="post")
+            h2.mb-4 Agregar paciente
+
+            .mb-3 
+               label.form-label(for="") Nombre:
+               input#nombreInput.form-control(type="text", placeholder="Ej: Mario")
+            .mb-3
+               label.form-label(for="") Apellido:
+               input#apellidoInput.form-control(type="text", placeholder="Ej: Lopez")
+            .mb-3
+               label.form-label(for="") Documento:
+               input#documentoInput.form-control(type="number", placeholder="Ej: 123123123")
+            .mb-3
+               label.form-label(for="") Fecha de nacimiento:
+               input#nacimientoInput.form-control(type="date")
+            .mb-4 
+               label.form-label(for="") Sexo: 
+               select#sexoSelect.form-select
+                  option(value="Masculino") Masculino
+                  option(value="Femenino") Femenino
+            
+            .mb-4
+               button#agregarPaciente.btn.btn-success(type="button") Agregar
+
+      .col-md-6
+         h2.mb-4 Listado de pacientes
+
+         .mb-3
+            label.form-label(for="") Buscar: 
+            input#buscarPaciente.form-control(type="number", placeholder="Buscar paciente por DNI")
+
+         .mb-4 
+            #pacientesInfo
+               each paciente in pacientes
+                  .alert.alert-success.mb-1(role="alert", data-id=paciente.id)
+                     | #{paciente.documento} | #{paciente.apellido}, #{paciente.nombre} | #{paciente.sexo}
+
+script(src="./js/paciente.js") 
