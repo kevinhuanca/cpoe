@@ -4,6 +4,8 @@ import { accesoRouter } from './routes/usuario.js';
 import { prescripcionesRouter } from './routes/prescripcion.js';
 import { medicamentosRouter } from './routes/medicamento.js';
 import { pacientesRouter } from './routes/paciente.js';
+import { profesionalesRouter } from './routes/profesional.js';
+import { prestacionesRouter } from './routes/prestacion.js';
 
 const app = express();
 
@@ -26,6 +28,8 @@ app.use('/acceso', accesoRouter);
 app.use('/prescripciones', prescripcionesRouter);
 app.use('/medicamentos', medicamentosRouter);
 app.use('/pacientes', pacientesRouter);
+app.use('/profesionales', profesionalesRouter);
+app.use('/prestaciones', prestacionesRouter);
 
 app.get('*', (req, res) => res.status(404).render('404'));
 

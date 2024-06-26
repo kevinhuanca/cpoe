@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { UsuarioModel } from "../models/usuario.js";
+import { ProfesionalModel } from "../models/profesional.js";
 
 export class UsuarioController {
 
@@ -25,23 +26,22 @@ export class UsuarioController {
       res.status(500).json({ message: 'Error al registrar el usuario' });
    }
 
-   static async entrar(req, res) {
+   static async entrar(req, res) { // 🟢
       const { nombre, clave } = req.body;
-      // console.log(nombre, clave);
 
       const usuario = await UsuarioModel.obtenerUsuarioPorNombre(nombre);
       if (!usuario) return res.send({ message: 'Usuario o contraseña incorrecta' });
       if (await bcrypt.compare(clave, usuario.clave)) {
          req.session.usuario = nombre;
          req.session.logueado = true;
-         // buscar el id del profesional o administrador, y guardarlo en el req.session
+
+         const profesional = await ProfesionalModel.obtenerProfesionalPorIdUsuario(usuario.id);
+         if (profesional) req.session.idProfesional = profesional.id;
 
          if (usuario.id_rol === 1) req.session.rol = 1;
          if (usuario.id_rol === 2) req.session.rol = 2;
 
          res.send({ message: 'Entrando...', rol: req.session.rol });
-
-         // console.log(req.session);
 
       } else {
          res.send({ message: 'Usuario o contraseña incorrecta' });

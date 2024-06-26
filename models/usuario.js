@@ -1,7 +1,7 @@
 import connection from "./db.js";
 
 export class UsuarioModel {
-   static async obtenerUsuarioPorNombre(nombre) {
+   static async obtenerUsuarioPorNombre(nombre) { // 🟢
       const [usuario] = await connection.execute('SELECT * FROM usuario WHERE nombre = ?', [nombre]);
       return usuario[0];
    }
