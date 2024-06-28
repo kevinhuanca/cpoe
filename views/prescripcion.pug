@@ -1,0 +1,107 @@
+include nav-prof.pug
+
+.container.mt-4
+   .row
+      .col-md-6
+         form#formu(action="", method="post")
+
+            //- PACIENTE
+            h2.mb-3 Paciente
+            .mb-3.d-flex
+               input#pacienteInput.form-control.me-2(type="number", placeholder="Escriba el dni del paciente" oninput="validarInput('#pacienteInput', '#buscarPaciente')")
+               button#buscarPaciente.btn.btn-success(type="button" disabled) Buscar
+            .mb-3
+               #pacienteInfo
+
+            //- OBRASOCIAL
+            .mb-2
+               label.form-label(for="") Obra Social:
+               select#obrasocialSelect.form-select
+                  option(value="0") No tiene
+                  each obrasocial in obrasociales
+                     option(value=obrasocial.id) #{obrasocial.nombre}
+            .mb-5
+               label.form-label(for="") Plan:
+               select#planSelect.form-select
+                  option(value="0") No tiene
+            
+            //- MEDICAMENTO
+            h2.mb-3 Medicamento
+            .mb-2
+               input#medicamentoInput.form-control(type="text", placeholder="Aca podes filtrar por nombre. Ej: Ibuprofeno")
+            .mb-4
+               select#medicamentos.form-select
+                  option(value="0" selected) Selecciona un medicamento
+                  each medicamento in medicamentos
+                     option(value=medicamento.id) #{medicamento.nombre} #{medicamento.concentracion} #{medicamento.formafarmaceutica} x#{medicamento.presentacion}
+            .mb-2
+               label.form-label(for="") Nombre comercial (opcional):
+               input#nombreComercialInput.form-control(type="text", placeholder="Ej: Ibumac")
+            .mb-2
+               label.form-label(for="") Dosis:
+               .input-group
+                  input#dosis1Input.form-control(type="number", placeholder="Ej: 1")
+                  span.input-group-text cada
+                  input#dosis2Input.form-control(type="number", placeholder="Ej: 8")
+                  span.input-group-text horas
+            .mb-3
+               label.form-label(for="duracionSelect") Duración:
+               .input-group
+                  input#duracionInput.form-control(type="number", placeholder="Ej: 2")
+                  select#duracionSelect.form-select
+                     option(value="dias") dias
+                     option(value="semanas") semanas
+            .mb-3
+               button#agregarMedicamento.btn.btn-success(type="button" disabled) Agregar medicamento
+            .mb-5
+               #medicamentoInfo
+
+            //- PRESTACION
+            h2.mb-3 Prestación
+            .mb-2
+               input#prestacionInput.form-control(type="text", placeholder="Aca podes filtrar por nombre. Ej: Radiografía")
+            .mb-4
+               select#prestaciones.form-select
+                  option(value="0" selected) Selecciona una prestación
+                  each prestacion in prestaciones
+                     option(value=prestacion.id) #{prestacion.nombre}
+            .mb-3
+               label.form-label(for="") Lado/zona (opcional):
+               input#ladoInput.form-control(type="text", placeholder="Ej: Toráx, Cerebro")
+            .mb-3
+               label.form-label(for="") Indicación:
+               input#indicacionInput.form-control(type="text", placeholder="Ej: Evaluación de la opacidad pulmonar...")
+            .mb-3
+               label.form-label(for="") Justificación:
+               input#justificacionInput.form-control(type="text", placeholder="Ej: La radiografía de tórax es una herramienta diagnóstica...")
+            .mb-3
+               button#agregarPrestacion.btn.btn-success(type="button" disabled) Agregar prestación
+            .mb-5
+               #prestacionInfo
+
+            //- PRESCRIPCION
+            .mb-4
+               label.form-label(for="") Vigencia de la prescripción:
+               select#vigenciaSelect.form-select
+                     option(value="30") 30 dias
+                     option(value="60") 60 dias
+            .mb-4
+               label.form-label(for="") Diagnostico:
+               input#diagnosticoInput.form-control(type="text")
+
+            //- .mb-4.form-check
+               //- label.form-check-label(for="imprimirCheck") Imprimir prescripción en PDF al finalizar.
+               //- input#imprimirCheck.form-check-input(type="checkbox", checked)
+            
+            .mb-5
+               button#agregarPrescripcion.btn.btn-success(type="button", disabled) Guardar prescripcion y generar pdf
+      
+      .col-md-6
+         h2.mb-3 Prescripciones anteriores
+
+         .mb-3
+            #prescripcionesInfo
+
+script(src="./js/prescripcion.js")
+script(src="./js/conclusion.js") 
+         
