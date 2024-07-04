@@ -6,6 +6,7 @@ import { medicamentosRouter } from './routes/medicamento.js';
 import { pacientesRouter } from './routes/paciente.js';
 import { profesionalesRouter } from './routes/profesional.js';
 import { prestacionesRouter } from './routes/prestacion.js';
+import { obrasocialesRouter } from './routes/obrasocial.js';
 
 const app = express();
 
@@ -16,11 +17,11 @@ app.use(session({
    cookie: { secure: false }
 }));
 
-// app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 
 app.set('view engine', 'pug');
+app.set('views', './views');
 
 app.get('/', (req, res) => res.redirect('/acceso'));
 
@@ -30,6 +31,7 @@ app.use('/medicamentos', medicamentosRouter);
 app.use('/pacientes', pacientesRouter);
 app.use('/profesionales', profesionalesRouter);
 app.use('/prestaciones', prestacionesRouter);
+app.use('/obrasociales', obrasocialesRouter);
 
 app.get('*', (req, res) => res.status(404).render('404'));
 
