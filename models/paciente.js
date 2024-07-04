@@ -12,4 +12,9 @@ export class PacienteModel {
       return result.insertId;
    }
 
+   static async obtenerPacientePorDocumento({ documento }) { // 🟢
+      const [paciente] = await connection.execute(`SELECT * FROM paciente WHERE documento = ?`, [documento]);
+      return paciente[0];
+   }
+
 }

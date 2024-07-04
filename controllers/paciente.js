@@ -21,4 +21,12 @@ export class PacienteController {
       }
    }
 
+   static async obtenerPacientePorDocumento(req, res) { // 🟢
+      const { documento } = req.params;
+      const paciente = await PacienteModel.obtenerPacientePorDocumento({ documento });
+
+      if (paciente) return res.json(paciente);
+      res.status(404).json({ message: 'No se encontro el paciente' });
+   }
+
 }
