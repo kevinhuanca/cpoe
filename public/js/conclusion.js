@@ -8,11 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const fechaActual = new Date().toISOString().split('T')[0];
       datosFormulario.fecha = fechaActual;
-   
+
       const vigencia = document.querySelector('#vigenciaSelect');
       let fecha = new Date();
       fecha.setDate(fecha.getDate() + parseInt(vigencia.value));
-      let fechaVigencia = fecha.toISOString().split('T')[0]; 
+      let fechaVigencia = fecha.toISOString().split('T')[0];
       datosFormulario.vigencia = fechaVigencia;
 
       const diagnostico = document.querySelector('#diagnosticoInput').value;
@@ -38,14 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
          let medicamentos = [];
          alertDivs.forEach(div => {
             let medicamento = {
-                id: div.getAttribute('data-id'),
-                dosis: div.getAttribute('data-dosis'),
-                duracion: div.getAttribute('data-duracion'),
-                comercial: div.getAttribute('data-comercial')
+               id: div.getAttribute('data-id'),
+               dosis: div.getAttribute('data-dosis'),
+               duracion: div.getAttribute('data-duracion'),
+               comercial: (div.getAttribute('data-comercial') === 'null') ? null : div.getAttribute('data-comercial')
             };
             medicamentos.push(medicamento);
-        });
-        datosFormulario.medicamentos = medicamentos;
+         });
+         datosFormulario.medicamentos = medicamentos;
       }
 
       const prestacionInfo = document.querySelector('#prestacionInfo').textContent;
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
          alertDivs.forEach(div => {
             let prestacion = {
                id: div.getAttribute('data-id'),
-               lado: div.getAttribute('data-lado'),
+               lado: (div.getAttribute('data-lado') === 'null') ? null : div.getAttribute('data-lado'),
                indicacion: div.getAttribute('data-indicacion'),
                justificacion: div.getAttribute('data-justificacion')
             };
@@ -75,13 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
          },
          body: JSON.stringify(datosFormulario)
       })
-      .then(response => response.json())
-      .then(data => {
-         console.log(data);
-      })
-      .catch(error => {
-         console.error('Error al agregar la prescripción:', error);
-      })
+         .then(response => response.json())
+         .then(data => {
+            const modalBody = document.querySelector('.modal-body');
+            modalBody.textContent = data.message;
+            const modal = new bootstrap.Modal('#staticBackdrop');
+            modal.show();
+         })
+         .catch(error => {
+            console.error('Error al agregar la prescripción:', error);
+         })
 
 
       // fetch(`/prescripciones/pdf`, {
