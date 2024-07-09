@@ -1,7 +1,0 @@
-POST http://localhost:3000/acceso/registrar/administrador
-Content-Type: application/json
-
-{
-   "nombre": "admin",
-   "clave": "admin"
-}
