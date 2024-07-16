@@ -17,4 +17,9 @@ export class PacienteModel {
       return paciente[0];
    }
 
+   static async obtenerPacientePorId(id) { // 🟢
+      const [paciente] = await connection.execute(`SELECT * FROM paciente WHERE id = ?`, [id]);
+      return paciente[0];
+   }
+
 }
