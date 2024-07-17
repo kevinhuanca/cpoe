@@ -2,6 +2,11 @@ import connection from "./db.js";
 
 export class PrestacionModel {
 
+   static async obtenerPrestacionPorId(id) { // 🟢
+      const [prestacion] = await connection.execute('SELECT * FROM prestacion WHERE id = ?', [id]);
+      return prestacion[0];
+   }
+
    static async obtenerPrestaciones() { // 🟢
       const [prestaciones] = await connection.execute('SELECT * FROM prestacion');
       return prestaciones;
