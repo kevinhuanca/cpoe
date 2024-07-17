@@ -1,6 +1,11 @@
 import connection from "./db.js";
 
 export class ProfesionalModel {
+
+   static async obtenerProfesionalPorId(id) {
+      const [profesional] = await connection.execute(`SELECT * FROM profesional WHERE id = ?`, [id]);
+      return profesional[0];
+   }
    
    static async obtenerProfesionales() { // 🟢
       const [profesionales] = await connection.execute(`
