@@ -4,10 +4,13 @@ export class PacienteController {
 
    static async vista(req, res) { // 🟢
       if (!req.session.logueado) res.redirect('/acceso');
-      if (req.session.rol === 2) res.redirect('/prescripciones');
-      if (req.session.rol === 1) {
+      if (req.session.rol) {
          const pacientes = await PacienteModel.obtenerPacientes();
-         res.render('paciente', { pacientes });
+         for (let i = 0; i < pacientes.length; i++) {
+            pacientes[i].nacimiento = new Date(pacientes[i].nacimiento);
+            pacientes[i].nacimiento = pacientes[i].nacimiento.toLocaleDateString('es-ES');
+         }
+         res.render('paciente', { pacientes, session: req.session });
       }
    }
 
@@ -24,8 +27,11 @@ export class PacienteController {
    static async obtenerPacientePorDocumento(req, res) { // 🟢
       const { documento } = req.params;
       const paciente = await PacienteModel.obtenerPacientePorDocumento({ documento });
-
-      if (paciente) return res.json(paciente);
+      
+      if (paciente) {
+         paciente.nacimiento = paciente.nacimiento.toLocaleDateString('es-ES');
+         return res.json(paciente);
+      }
       res.status(404).json({ message: 'No se encontro el paciente' });
    }
 
