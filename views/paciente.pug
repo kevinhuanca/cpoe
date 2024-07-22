@@ -1,43 +1,73 @@
-include nav-admin.pug
+include navbar.pug
 
 .container.mt-4
    .row
-      .col-md-6
+      .col-md-4
          form#formu(action="", method="post")
-            h2.mb-4 Agregar paciente
+            h2.mb-4#tituloPaciente Agregar paciente
 
-            .mb-3 
-               label.form-label(for="") Nombre:
+            .input-group.mb-4
+               span.input-group-text Nombre:
                input#nombreInput.form-control(type="text", placeholder="Ej: Mario")
-            .mb-3
-               label.form-label(for="") Apellido:
+            .input-group.mb-4
+               span.input-group-text Apellido:
                input#apellidoInput.form-control(type="text", placeholder="Ej: Lopez")
-            .mb-3
-               label.form-label(for="") Documento:
-               input#documentoInput.form-control(type="number", placeholder="Ej: 123123123")
-            .mb-3
-               label.form-label(for="") Fecha de nacimiento:
+            .input-group.mb-4
+               span.input-group-text Documento:
+               input#documentoInput.form-control(type="number", placeholder="Ej: 23123123")
+            .input-group.mb-4
+               span.input-group-text Nacimiento:
                input#nacimientoInput.form-control(type="date")
-            .mb-4 
-               label.form-label(for="") Sexo: 
+            .input-group.mb-4
+               span.input-group-text Sexo: 
                select#sexoSelect.form-select
                   option(value="Masculino") Masculino
                   option(value="Femenino") Femenino
             
-            .mb-4
+            .d-grid
                button#agregarPaciente.btn.btn-success(type="button") Agregar
+            .d-flex.mb-5
+               button#editarPaciente.btn.btn-success.d-none(type="button") Guardar
+               button#cancelarPaciente.btn.btn-danger(type="button") Cancelar
 
-      .col-md-6
+      .col-md-8
          h2.mb-4 Listado de pacientes
 
-         .mb-3
-            label.form-label(for="") Buscar: 
-            input#buscarPaciente.form-control(type="number", placeholder="Buscar paciente por DNI")
+         .mb-5
+            table#tablaPacientes.table.table-striped(style="width:100%")
+               thead
+                  tr
+                     th DNI
+                     th NOMBRE
+                     th NACIMIENTO
+                     th SEXO
+                     th ACCIONES
+               tbody
+                  each paciente in pacientes
+                     tr
+                        td #{paciente.documento}
+                        td #{paciente.apellido}, #{paciente.nombre}
+                        td #{paciente.nacimiento}
+                        td #{paciente.sexo}
+                        td
+                           button.btnEditar.btn.btn-sm.btn-primary(
+                              data-id=paciente.documento,
+                              data-bs-toggle="tooltip",
+                              data-bs-placement="right",
+                              data-bs-title="Editar"
+                           )
+                              i.bi-pencil-square
 
-         .mb-4 
-            #pacientesInfo
-               each paciente in pacientes
-                  .alert.alert-success.mb-1(role="alert", data-id=paciente.id)
-                     | #{paciente.documento} | #{paciente.apellido}, #{paciente.nombre} | #{paciente.sexo}
+.modal.fade#modalEditarPaciente(data-bs-backdrop="static", data-bs-keyboard="false", tabindex="-1", aria-labelledby="staticBackdropLabel", aria-hidden="true")
+   .modal-dialog.modal-dialog-centered
+      .modal-content
+         .modal-header
+            h1.modal-title.fs-5#staticBackdropLabel CPOE
+         .modal-body#mensajeEditarPaciente
+            | ...
+         .modal-footer
+            button.btn.btn-dark(type="button", onclick="window.location.reload()") Aceptar
 
 script(src="./js/paciente.js") 
+
+include footer.pug

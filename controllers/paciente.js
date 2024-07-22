@@ -35,4 +35,15 @@ export class PacienteController {
       res.status(404).json({ message: 'No se encontro el paciente' });
    }
 
+   static async editarPaciente(req, res) { // 🟢
+      const { id } = req.params;
+      const { nombre, apellido, documento, nacimiento, sexo } = req.body;
+      const actualizado = await PacienteModel.editarPaciente(id, nombre, apellido, documento, nacimiento, sexo);
+      if (actualizado) {
+         res.send({ message: 'Paciente actualizada exitosamente' });
+      } else {
+         res.status(500).json({ message: 'Error al actualizar la paciente' });
+      }
+   }
+
 }

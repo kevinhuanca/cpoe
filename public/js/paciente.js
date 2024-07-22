@@ -1,18 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-   const searchInput = document.getElementById('buscarPaciente');
-   const pacientesContainer = document.getElementById('pacientesInfo');
-   const pacientes = pacientesContainer.getElementsByClassName('alert');
 
-   searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase();
-      Array.from(pacientes).forEach(paciente => {
-         const pacienteName = paciente.textContent.toLowerCase();
-         if (pacienteName.includes(query)) {
-            paciente.style.display = 'block';
-         } else {
-            paciente.style.display = 'none';
-         }
+   const botonesEditar = document.querySelectorAll('#tablaPacientes .btnEditar');
+   botonesEditar.forEach(boton => {
+      boton.addEventListener('click', () => {
+         const documento = boton.getAttribute('data-id');
+
+         fetch(`/pacientes/${documento}`)
+            .then((response) => response.json())
+            .then((paciente) => {
+               console.log(paciente);
+               document.querySelector('#tituloPaciente').textContent = 'Editar Paciente';
+
+               document.querySelector('#nombreInput').value = paciente.nombre;
+               document.querySelector('#apellidoInput').value = paciente.apellido;
+               document.querySelector('#documentoInput').value = paciente.documento;
+               let partesFecha = paciente.nacimiento.split('/');
+               let dia = parseInt(partesFecha[0], 10);
+               let mes = parseInt(partesFecha[1], 10) - 1;
+               let anio = parseInt(partesFecha[2], 10);
+               let fechaJS = new Date(anio, mes, dia);
+               let fechaISO = fechaJS.toISOString().split('T')[0];
+               document.querySelector('#nacimientoInput').value = fechaISO;
+               document.querySelector('#sexoSelect').value = paciente.sexo;
+
+               const editarPacienteBtn = document.querySelector('#editarPaciente');
+               editarPacienteBtn.classList.remove('d-none');
+               editarPacienteBtn.setAttribute('data-id', paciente.id);
+               editarPacienteBtn.disabled = false;
+               document.querySelector('#agregarPaciente').classList.add('d-none');
+            });
+
       });
+      
    });
 
    const nombreInput = document.getElementById('nombreInput');
@@ -20,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
    const documentoInput = document.getElementById('documentoInput');
    const nacimientoInput = document.getElementById('nacimientoInput');
    const agregarPacienteBtn = document.getElementById('agregarPaciente');
+   const editarPacienteBtn = document.querySelector('#editarPaciente');
+
+   const hoy = new Date().toISOString().split('T')[0];
+   nacimientoInput.setAttribute('max', hoy); // seteo fecha maxima
 
    function validarCampos() {
       const nombre = nombreInput.value.trim();
@@ -29,8 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (nombre !== '' && apellido !== '' && documento !== '' && nacimiento !== '') {
          agregarPacienteBtn.disabled = false;
+         editarPacienteBtn.disabled = false;
       } else {
          agregarPacienteBtn.disabled = true;
+         editarPacienteBtn.disabled = true;
       }
    }
 
@@ -41,8 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
    documentoInput.addEventListener('input', validarCampos);
    nacimientoInput.addEventListener('input', validarCampos);
 
-   agregarPacienteBtn.addEventListener('click', (e) => {
-      e.preventDefault();
+   agregarPacienteBtn.addEventListener('click', () => {
       const nombre = nombreInput.value;
       const apellido = apellidoInput.value;
       const documento = documentoInput.value;
@@ -58,10 +82,41 @@ document.addEventListener('DOMContentLoaded', () => {
       })
          .then((response) => response.json())
          .then((data) => {
-            console.log(data.message);
-            location.reload();
+            if (data.message) {
+               const modalBody = document.querySelector('#mensajeEditarPaciente');
+               modalBody.textContent = `¡${data.message}!`;
+               const modal = new bootstrap.Modal('#modalEditarPaciente');
+               modal.show();
+            }
          });
 
+   });
+
+   editarPacienteBtn.addEventListener('click', () => {
+      const nombre = nombreInput.value;
+      const apellido = apellidoInput.value;
+      const documento = documentoInput.value;
+      const nacimiento = nacimientoInput.value;
+      const sexo = document.querySelector('#sexoSelect').value;
+
+      let id = editarPacienteBtn.getAttribute('data-id');
+
+      fetch(`/pacientes/editar/${id}`, {
+         method: 'PUT',
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({ nombre, apellido, documento, nacimiento, sexo })
+      })
+         .then((response) => response.json())
+         .then((data) => {
+            if (data.message) {
+               const modalBody = document.querySelector('#mensajeEditarPaciente');
+               modalBody.textContent = `¡${data.message}!`;
+               const modal = new bootstrap.Modal('#modalEditarPaciente');
+               modal.show();
+            }
+         });
    });
    
 })

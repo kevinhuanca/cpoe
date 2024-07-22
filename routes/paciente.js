@@ -6,3 +6,4 @@ export const pacientesRouter = express.Router();
 pacientesRouter.get('/', PacienteController.vista); // 🟢
 pacientesRouter.post('/agregar', PacienteController.agregarPaciente); // 🟢
 pacientesRouter.get('/:documento', PacienteController.obtenerPacientePorDocumento); // 🟢
+pacientesRouter.put('/editar/:id', PacienteController.editarPaciente); // 🟢
