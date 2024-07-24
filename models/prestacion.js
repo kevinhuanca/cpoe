@@ -13,8 +13,23 @@ export class PrestacionModel {
    }
 
    static async agregarPrestacion(prestacion) { // 🟢
-      const [result] = await connection.execute('INSERT INTO prestacion (nombre) VALUES (?)', [prestacion]);
+      const [result] = await connection.execute('INSERT INTO prestacion (nombre, estado) VALUES (?, 1)', [prestacion]);
       return result.insertId;
+   }
+
+   static async editarPrestacion(id, prestacion) { // 🟢
+      const [result] = await connection.execute('UPDATE prestacion SET nombre = ? WHERE id = ?', [prestacion, id]);
+      return result.affectedRows;
+   }
+
+   static async habilitarPrestacion(id) { // 🟢
+      const [result] = await connection.execute('UPDATE prestacion SET estado = 1 WHERE id = ?', [id]);
+      return result.affectedRows;
+   }
+   
+   static async deshabilitarPrestacion(id) { // 🟢
+      const [result] = await connection.execute('UPDATE prestacion SET estado = 0 WHERE id = ?', [id]);
+      return result.affectedRows;
    }
 
 }

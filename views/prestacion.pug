@@ -1,29 +1,81 @@
-include nav-admin.pug
+include navbar.pug
 
 .container.mt-4
    .row
-      .col-md-6
+      .col-md-4
          form#formu(action="", method="post")
-            h2.mb-4 Agregar prestación
+            h2.mb-4#tituloPrestacion Agregar prestación
 
-            .mb-3
-               label.form-label(for="") Nombre de la prestación:
-               input#prestacionInput.form-control(type="text", placeholder="Prestación", oninput="validarInput('#prestacionInput', '#agregarPrestacion')")
+            .input-group.mb-4
+               span.input-group-text Nombre:
+               input#prestacionInput.form-control(type="text", placeholder="Ej: Radiografía", oninput="validarInput('#prestacionInput', '#agregarPrestacion')")
 
-            .mb-4
+            .d-grid
                button#agregarPrestacion.btn.btn-success(type="button" disabled) Agregar
+            .d-flex.mb-5
+               button#editarPrestacion.btn.btn-success.flex-fill.me-2.d-none(type="button") Guardar
+               button#cancelarPrestacion.btn.btn-danger.flex-fill.d-none(type="button") Cancelar
 
-      .col-md-6
+      .col-md-8
          h2.mb-4 Listado de prestaciones
 
-         .mb-3
-            label.form-label(for="") Buscar: 
-            input#buscarPrestacion.form-control(type="text", placeholder="Buscar prestación por nombre")
+         .mb-5
+            table#tablaPrestaciones.table.table-striped(style="width:100%")
+               thead
+                  tr
+                     th NOMBRE
+                     th ESTADO
+                     th ACCIONES
+               tbody
+                  each prestacion in prestaciones
+                     tr
+                        td #{prestacion.nombre}
+                        td #{prestacion.estado ? 'Activo' : 'Inactivo'}
+                        if prestacion.estado
+                           td
+                              button.btnEditar.btn.btn-sm.btn-primary(
+                                 data-id=prestacion.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="left",
+                                 data-bs-title="Editar"
+                              )
+                                 i.bi-pencil-square
+                              | 
+                              button.btnDesactivar.btn.btn-sm.btn-danger(
+                                 data-id=prestacion.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="right",
+                                 data-bs-title="Desactivar"
+                              )
+                                 i.bi-dash-square
+                        else
+                           td
+                              button.btnEditar.btn.btn-sm.btn-primary(
+                                 data-id=prestacion.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="left",
+                                 data-bs-title="Editar"
+                              )
+                                 i.bi-pencil-square
+                              | 
+                              button.btnActivar.btn.btn-sm.btn-success(
+                                 data-id=prestacion.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="right",
+                                 data-bs-title="Activar"
+                              )
+                                 i.bi-check2-square
 
-         .mb-4
-            #prestacionesInfo
-               each prestacion in prestaciones
-                  .alert.alert-success.mb-1(role="alert", data-id=prestacion.id)
-                     | #{prestacion.nombre}
+.modal.fade#modalPrestacion(data-bs-backdrop="static", data-bs-keyboard="false", tabindex="-1", aria-labelledby="staticBackdropLabel", aria-hidden="true")
+   .modal-dialog.modal-dialog-centered
+      .modal-content
+         .modal-header
+            h1.modal-title.fs-5.text-center#staticBackdropLabel CPOE
+         .modal-body#mensajePrestacion
+            | ...
+         .modal-footer
+            button.btn.btn-dark(type="button", onclick="window.location.reload()") Aceptar
 
 script(src="./js/prestacion.js") 
+
+include footer.pug

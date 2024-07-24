@@ -1,25 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
-   const searchInput = document.getElementById('buscarPrestacion');
-   const prestacionesContainer = document.getElementById('prestacionesInfo');
-   const prestaciones = prestacionesContainer.getElementsByClassName('alert');
 
-   searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase();
-      Array.from(prestaciones).forEach(prestacion => {
-         const prestacionName = prestacion.textContent.toLowerCase();
-         if (prestacionName.includes(query)) {
-            prestacion.style.display = 'block';
-         } else {
-            prestacion.style.display = 'none';
-         }
+   const botonesEditar = document.querySelectorAll('#tablaPrestaciones .btnEditar');
+   botonesEditar.forEach((boton) => {
+      boton.addEventListener('click', () => {
+         const id = boton.getAttribute('data-id');
+         fetch(`/prestaciones/${id}`)
+            .then((response) => response.json())
+            .then((prestacion) => {
+               document.querySelector('#tituloPrestacion').textContent = 'Editar Prestacion';
+               const prestacionInput = document.querySelector('#prestacionInput');
+               prestacionInput.value = prestacion.nombre;
+               prestacionInput.setAttribute('oninput', 'validarInput(\'#prestacionInput\', \'#editarPrestacion\')');
+               document.querySelector('#agregarPrestacion').classList.add('d-none');
+               const editarPacienteBtn = document.querySelector('#editarPrestacion');
+               editarPacienteBtn.classList.remove('d-none');
+               editarPacienteBtn.setAttribute('data-id', prestacion.id);
+               editarPacienteBtn.disabled = false;
+               document.querySelector('#cancelarPrestacion').classList.remove('d-none');
+            });
       });
    });
 
-   
-   const btnAgregar = document.querySelector('#agregarPrestacion');
+   const botonesDesactivar = document.querySelectorAll('#tablaPrestaciones .btnDesactivar');
+   botonesDesactivar.forEach((boton) => {
+      boton.addEventListener('click', () => {
+         const id = boton.getAttribute('data-id');
+         fetch('/prestaciones/desactivar', {
+            method: 'PUT',
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id })
+         })
+            .then((response) => response.json())
+            .then((data) => {
+               if (data.message) {
+                  const modalBody = document.querySelector('#mensajePrestacion');
+                  modalBody.textContent = `¡${data.message}!`;
+                  const modal = new bootstrap.Modal('#modalPrestacion');
+                  modal.show();
+               }
+            });
+      });
+   });
 
-   btnAgregar.addEventListener('click', (e) => {
-      e.preventDefault();
+   const botonesActivar = document.querySelectorAll('#tablaPrestaciones .btnActivar');
+   botonesActivar.forEach((boton) => {
+      boton.addEventListener('click', () => {
+         const id = boton.getAttribute('data-id');
+         fetch('/prestaciones/activar', {
+            method: 'PUT',
+            headers: {
+               'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id })
+         })
+            .then((response) => response.json())
+            .then((data) => {
+               if (data.message) {
+                  const modalBody = document.querySelector('#mensajePrestacion');
+                  modalBody.textContent = `¡${data.message}!`;
+                  const modal = new bootstrap.Modal('#modalPrestacion');
+                  modal.show();
+               }
+            });
+      });
+   });
+      
+   const agregarPrestacionBtn = document.querySelector('#agregarPrestacion');
+   agregarPrestacionBtn.addEventListener('click', () => {
       const nombre = document.querySelector('#prestacionInput').value;
 
       fetch('/prestaciones/agregar', {
@@ -31,10 +80,47 @@ document.addEventListener('DOMContentLoaded', () => {
       })
          .then((response) => response.json())
          .then((data) => {
-            console.log(data.message);
-            location.reload();
+            if (data.message) {
+               const modalBody = document.querySelector('#mensajePrestacion');
+               modalBody.textContent = `¡${data.message}!`;
+               const modal = new bootstrap.Modal('#modalPrestacion');
+               modal.show();
+            }
          });
       
+   });
+
+   const editarPrestacionBtn = document.querySelector('#editarPrestacion');
+   editarPrestacionBtn.addEventListener('click', () => {
+      const nombre = document.querySelector('#prestacionInput').value;
+      const id = editarPrestacionBtn.getAttribute('data-id');
+
+      fetch('/prestaciones/editar', {
+         method: 'PUT',
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         body: JSON.stringify({ id, nombre })
+      })
+         .then((response) => response.json())
+         .then((data) => {
+            if (data.message) {
+               const modalBody = document.querySelector('#mensajePrestacion');
+               modalBody.textContent = `¡${data.message}!`;
+               const modal = new bootstrap.Modal('#modalPrestacion');
+               modal.show();
+            }
+         });
+   });
+
+   const cancelarPrestacionBtn = document.querySelector('#cancelarPrestacion');
+   cancelarPrestacionBtn.addEventListener('click', () => {
+      document.querySelector('#tituloPrestacion').textContent = 'Agregar prestación';
+      document.querySelector('#prestacionInput').setAttribute('oninput', 'validarInput(\'#prestacionInput\', \'#agregarPrestacion\')');
+      document.querySelector('#prestacionInput').value = '';
+      document.querySelector('#agregarPrestacion').classList.remove('d-none');
+      document.querySelector('#editarPrestacion').classList.add('d-none');
+      document.querySelector('#cancelarPrestacion').classList.add('d-none');
    });
 
 });
