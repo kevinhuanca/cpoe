@@ -86,10 +86,6 @@ include navbar.pug
             .input-group.mb-4
                span.input-group-text Diagnostico:
                input#diagnosticoInput.form-control(type="text")
-
-            //- .mb-4.form-check
-               //- label.form-check-label(for="imprimirCheck") Imprimir prescripción en PDF al finalizar.
-               //- input#imprimirCheck.form-check-input(type="checkbox", checked)
             
             .d-grid.mb-5
                button#agregarPrescripcion.btn.btn-success(type="button", disabled) Guardar prescripcion y generar PDF
@@ -97,24 +93,25 @@ include navbar.pug
       .col-md-6
          h2.mb-3 Prescripciones anteriores
 
-         .mb-3
+         .mb-5
             #prescripcionesInfo
                .alert.alert-primary.text-center(role="alert") Para ver prescripciones anteriores primero busque un paciente.
 
 //- MODAL PARA PRESCRIPCION COMPLETA
 .modal.fade#staticBackdrop(data-bs-backdrop="static", data-bs-keyboard="false", tabindex="-1", aria-labelledby="staticBackdropLabel", aria-hidden="true")
-   .modal-dialog
+   .modal-dialog.modal-dialog-centered
       .modal-content
          .modal-header
             h1.modal-title.fs-5#staticBackdropLabel CPOE
          .modal-body#mensajePrescripcion
             | ...
          .modal-footer
-            button.btn.btn-dark(type="button", data-bs-dismiss="modal" , onclick="window.location.reload()") Aceptar
+            button.btn.btn-secondary(type="button", data-bs-dismiss="modal" , onclick="window.location.reload()") Cerrar
+            button#btnPDF.btn.btn-dark(type="button") Generar PDF
 
 //- MODAL PARA PACIENTE INEXISTENTE
 .modal.fade#exampleModal(tabindex="-1", aria-labelledby="exampleModalLabel", aria-hidden="true")
-   .modal-dialog
+   .modal-dialog.modal-dialog-centered
       .modal-content
          .modal-header
             h1.modal-title.fs-5#exampleModalLabel CPOE
@@ -124,5 +121,18 @@ include navbar.pug
             button.btn.btn-secondary(type="button", data-bs-dismiss="modal") Cerrar
             a.btn.btn-dark(type="button", href="/pacientes") Agregar Paciente
 
-script(src="./js/prescripcion.js")
-script(src="./js/conclusion.js")
+script(src="./js/prescripcion.js", type="module")
+script(src="./js/conclusion.js", type="module")
+script.
+   function validarInput(inputId, botonId) {
+      const input = document.querySelector(inputId);
+      const boton = document.querySelector(botonId);
+
+      if (input.value.trim() === '') {
+         boton.disabled = true;
+      } else {
+         boton.disabled = false;
+      }
+   }
+
+include footer.pug
