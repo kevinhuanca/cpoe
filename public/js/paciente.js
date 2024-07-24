@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
                editarPacienteBtn.classList.remove('d-none');
                editarPacienteBtn.setAttribute('data-id', paciente.id);
                editarPacienteBtn.disabled = false;
+               const cancelarPacienteBtn = document.querySelector('#cancelarPaciente');
+               cancelarPacienteBtn.classList.remove('d-none');
                document.querySelector('#agregarPaciente').classList.add('d-none');
             });
 
@@ -117,6 +119,19 @@ document.addEventListener('DOMContentLoaded', () => {
                modal.show();
             }
          });
+   });
+
+   const cancelarPacienteBtn = document.querySelector('#cancelarPaciente');
+   cancelarPacienteBtn.addEventListener('click', () => {
+      document.querySelector('#tituloPaciente').textContent = 'Agregar paciente';
+      document.querySelector('#nombreInput').value = '';
+      document.querySelector('#apellidoInput').value = '';
+      document.querySelector('#documentoInput').value = '';
+      document.querySelector('#nacimientoInput').value = '';
+      document.querySelector('#sexoSelect').value = 'Masculino';
+      document.querySelector('#agregarPaciente').classList.remove('d-none');
+      document.querySelector('#editarPaciente').classList.add('d-none');
+      document.querySelector('#cancelarPaciente').classList.add('d-none');
    });
    
 })

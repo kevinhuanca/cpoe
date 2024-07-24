@@ -22,4 +22,9 @@ export class PacienteModel {
       return paciente[0];
    }
 
+   static async editarPaciente(id, nombre, apellido, documento, nacimiento, sexo) { // 🟢
+      const [result] = await connection.execute('UPDATE paciente SET nombre = ?, apellido = ?, documento = ?, nacimiento = ?, sexo = ? WHERE id = ?', [nombre, apellido, documento, nacimiento, sexo, id]);
+      return result.affectedRows;
+   }
+
 }
