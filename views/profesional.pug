@@ -1,56 +1,139 @@
-include nav-admin.pug
+include navbar.pug
 
 .container.mt-4
    .row
-      .col-md-6
+      .col-md-4
          form#formu(action="", method="post")
-            h2.mb-4 Agregar profesional
+            h2.mb-4#tituloProfesional Agregar profesional
 
-            .mb-3 
-               label.form-label(for="") Nombre:
+            .input-group.mb-4
+               span.input-group-text Nombre:
                input#nombreInput.form-control(type="text", placeholder="Ej: Pablo")
-            .mb-3
-               label.form-label(for="") Apellido:
+            .input-group.mb-4
+               span.input-group-text Apellido:
                input#apellidoInput.form-control(type="text", placeholder="Ej: Lopez")
-            .mb-3
-               label.form-label(for="") Documento:
+            .input-group.mb-4
+               span.input-group-text Documento:
                input#documentoInput.form-control(type="number", placeholder="Ej: 34343434")
-            .mb-3
-               label.form-label(for="") Domicilio:
+            .input-group.mb-4
+               span.input-group-text Domicilio:
                input#domicilioInput.form-control(type="text", placeholder="Ej: Calle 123")
-            .mb-3
-               label.form-label(for="") Profesion:
-               select#profesionSelect.form-select
-                  option(value="0") Seleccione una profesión
-                  each profesion in profesiones
-                     option(value=profesion.id) #{profesion.nombre}
-            .mb-3
-               label.form-label(for="") Especialidad: 
-               select#especialidadSelect.form-select
-                  option(value="0") Seleccione una especialidad
-            .mb-3
-               label.form-label(for="") Matricula:
+            .d-flex.mb-4
+               .input-group
+                  span.input-group-text Profesion:
+                  select#profesionSelect.form-select.me-1
+                     option(value="0") Seleccione una profesión
+                     each profesion in profesiones
+                        option(value=profesion.id) #{profesion.nombre}
+               button#agregarProfesion.btn.btn-dark(type="button", data-bs-toggle="tooltip", data-bs-placement="right", data-bs-title="Agregar")
+                  i.bi-plus-lg
+            .d-flex.mb-2
+               .input-group
+                  span.input-group-text.w-100.me-1 Especialidades:
+               button#agregarEspecialidad.btn.btn-dark(type="button", data-bs-toggle="tooltip", data-bs-placement="right", data-bs-title="Agregar")
+                  i.bi-plus-lg
+            .row.mb-4
+               .col-6#especialidadColumn
+                  each especialidad in especialidades.slice(0, Math.ceil(especialidades.length / 2))
+                     .form-check.bg-body-tertiary
+                        input.form-check-input(type="checkbox", value=`${especialidad.id}`)
+                        label.form-check-label #{especialidad.nombre}
+               .col-6
+                  each especialidad in especialidades.slice(Math.ceil(especialidades.length / 2))
+                     .form-check.bg-body-tertiary
+                        input.form-check-input(type="checkbox", value=`${especialidad.id}`)
+                        label.form-check-label #{especialidad.nombre}
+            .input-group.mb-4
+               span.input-group-text Matricula:
                input#matriculaInput.form-control(type="number", placeholder="Ej: 54321")
-            .mb-3
-               label.form-label(for="") Refeps:
+            .input-group.mb-4
+               span.input-group-text Refeps:
                input#refepsInput.form-control(type="number", placeholder="Ej: 12345")
-            .mb-3
-               p *Una vez agregado el profesional, se genera un nuevo usuario y contraseña con el documento del mismo.
+            .text-center.mb-4#info
+               p *Se genera un nuevo usuario y contraseña con el documento del profesional.
             
-            .mb-4
+            .d-grid
                button#agregarProfesional.btn.btn-success(type="button") Agregar
+            .d-flex.mb-5
+               button#editarProfesional.btn.btn-success.flex-fill.me-2.d-none(type="button") Guardar
+               button#cancelarProfesional.btn.btn-danger.flex-fill.d-none(type="button") Cancelar
 
-      .col-md-6
+      .col-md-8
          h2.mb-4 Listado de profesionales
 
-         .mb-3
-            label.form-label(for="") Buscar:
-            input#buscarProfesional.form-control(type="number", placeholder="Buscar profesional por DNI")
+         .mb-5
+            table#tablaProfesionales.table.table-striped(style="width:100%")
+               thead
+                  tr
+                     th DNI
+                     th NOMBRE
+                     th PROFESION
+                     th ESPECIALIDAD
+                     th MATRICULA
+                     th ACCIONES
+               tbody
+                  each profesional in profesionales
+                     tr
+                        td #{profesional.documento}
+                        td #{profesional.apellido}, #{profesional.nombre}
+                        td #{profesional.profesion.nombre}
+                        td #{profesional.especialidades ? profesional.especialidades.map(especialidad => especialidad.nombre).join(", ") : "No tiene"}
+                        td #{profesional.matricula}
+                        if profesional.estado
+                           td
+                              button.btnEditar.btn.btn-sm.btn-primary(
+                                 data-id=profesional.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="left",
+                                 data-bs-title="Editar"
+                              )
+                                 i.bi-pencil-square
+                              | 
+                              button.btnDesactivar.btn.btn-sm.btn-danger(
+                                 data-id=profesional.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="right",
+                                 data-bs-title="Desactivar"
+                              )
+                                 i.bi-dash-square
+                        else
+                           td
+                              button.btnEditar.btn.btn-sm.btn-primary(
+                                 data-id=profesional.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="left",
+                                 data-bs-title="Editar"
+                              )
+                                 i.bi-pencil-square
+                              | 
+                              button.btnActivar.btn.btn-sm.btn-success(
+                                 data-id=profesional.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="right",
+                                 data-bs-title="Activar"
+                              )
+                                 i.bi-check2-square
 
-         .mb-4 
-            #profesionalesInfo
-               each profesional in profesionales
-                  .alert.alert-success.mb-1(role="alert", data-id=profesional.id)
-                     | #{profesional.documento} | #{profesional.apellido}, #{profesional.nombre} | #{profesional.profesion} | #{profesional.especialidad}
+.modal.fade#modalProfesional(data-bs-backdrop="static", data-bs-keyboard="false", tabindex="-1", aria-labelledby="staticBackdropLabel", aria-hidden="true")
+   .modal-dialog.modal-dialog-centered
+      .modal-content
+         .modal-header
+            h1.modal-title.fs-5.text-center#staticBackdropLabel CPOE
+         .modal-body#mensajeProfesional
+            | ...
+         .modal-footer
+            button.btn.btn-dark(type="button", onclick="window.location.reload()") Aceptar
+
+.modal.fade#modalAgregar(tabindex="-1", aria-hidden="true")
+   .modal-dialog.modal-dialog-centered
+      .modal-content
+         .modal-header#modalHeader
+            h1.modal-title.fs-5.text-center CPOE
+            button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+         .modal-body.m-3#modalBody
+         .modal-footer.d-flex.justify-content-center#modalFooter
+            button#botonAgregar.btn.btn-dark(type="button") Agregar
 
 script(src="./js/profesional.js") 
+
+include footer.pug
