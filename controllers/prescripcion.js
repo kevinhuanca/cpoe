@@ -14,9 +14,6 @@ export class PrescripcionController {
          const obrasociales = await ObraSocialModel.obtenerObrasSociales();
          const medicamentos = await MedicamentoModel.obtenerMedicamentos();
          const prestaciones = await PrestacionModel.obtenerPrestaciones();
-
-         medicamentos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-         prestaciones.sort((a, b) => a.nombre.localeCompare(b.nombre));
          res.render('prescripcion', { medicamentos, obrasociales, prestaciones, session: req.session });
       }
    }

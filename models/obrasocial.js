@@ -3,7 +3,7 @@ import connection from "./db.js";
 export class ObraSocialModel {
 
    static async obtenerObrasSociales() { // 🟢
-      const [obrasSociales] = await connection.execute('SELECT * FROM obrasocial');
+      const [obrasSociales] = await connection.execute('SELECT * FROM obrasocial ORDER BY nombre');
       return obrasSociales;
    }
 

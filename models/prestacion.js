@@ -8,7 +8,7 @@ export class PrestacionModel {
    }
 
    static async obtenerPrestaciones() { // 🟢
-      const [prestaciones] = await connection.execute('SELECT * FROM prestacion');
+      const [prestaciones] = await connection.execute('SELECT * FROM prestacion ORDER BY nombre');
       return prestaciones;
    }
 
