@@ -31,6 +31,7 @@ export class UsuarioController {
 
       const usuario = await UsuarioModel.obtenerUsuarioPorNombre(nombre);
       if (!usuario) return res.send({ message: 'Usuario o contraseña incorrecta' });
+      if (!usuario.estado) return res.send({ message: 'Usuario o contraseña incorrecta' });
       if (await bcrypt.compare(clave, usuario.clave)) {
          req.session.usuario = nombre;
          req.session.logueado = true;
@@ -59,6 +60,19 @@ export class UsuarioController {
          res.redirect('/acceso');
       });
       console.log(req.session);
+   }
+
+   static async cambiarClave(req, res) { // 🟢
+      const { actual, nueva } = req.body;
+      const usuario = await UsuarioModel.obtenerUsuarioPorNombre(req.session.usuario);
+      if (!usuario) return res.send({ message: false });
+      if (await bcrypt.compare(actual, usuario.clave)) {
+         const claveHasheada = await bcrypt.hash(nueva, 10);
+         const actualizado = await UsuarioModel.actualizarUsuario(usuario.id, usuario.nombre, claveHasheada);
+         if (actualizado) res.send({ message: true });
+      } else {
+         res.send({ message: false });
+      }
    }
 
 }
