@@ -109,6 +109,8 @@ export class ProfesionalController {
          const profesional = await ProfesionalModel.obtenerProfesionalPorId(id);
          const usuario = await UsuarioModel.obtenerUsuarioPorId(profesional.id_usuario);
          await UsuarioModel.habilitarUsuario(usuario.id);
+         const claveHasheada = await bcrypt.hash(`${profesional.documento}`, 10);
+         await UsuarioModel.actualizarUsuario(usuario.id, usuario.nombre, claveHasheada);
          res.send({ message: 'Profesional y Usuario habilitado con exito' });
       } else {
          res.status(500).json({ message: 'Error al habilitar el profesional' });
