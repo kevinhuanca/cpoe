@@ -1,3 +1,5 @@
+import { generarPDF } from "./prescripcion.js";
+
 document.addEventListener('DOMContentLoaded', () => {
 
    const agregarPrescripcionBtn = document.querySelector('#agregarPrescripcion');
@@ -77,34 +79,24 @@ document.addEventListener('DOMContentLoaded', () => {
       })
          .then(response => response.json())
          .then(data => {
-            const modalBody = document.querySelector('.modal-body');
-            modalBody.textContent = data.message;
-            const modal = new bootstrap.Modal('#staticBackdrop');
-            modal.show();
+            if (data.message) {
+               const modalBody = document.querySelector('#mensajePrescripcion');
+               modalBody.textContent = data.message;
+               const modal = new bootstrap.Modal('#staticBackdrop');
+               
+               document.querySelector('#staticBackdrop').addEventListener('click', function(event) {
+                  if (event.target && event.target.id === 'btnPDF') {
+                     generarPDF(data.ultimaPrescripcion);
+                  }
+               });
+
+               modal.show();
+            }
          })
          .catch(error => {
             console.error('Error al agregar la prescripción:', error);
          })
 
-
-      // fetch(`/prescripciones/pdf`, {
-      //    method: 'POST',
-      //    headers: {
-      //       'Content-Type': 'application/json'
-      //    },
-      //    body: JSON.stringify(datosFormulario)
-      // })
-      // .then(response => response.json())
-      // .then(data => {
-      //    console.log(data);
-      // })
-      // .catch(error => {
-      //    console.error('Error al generar el PDF:', error);
-      // })
-
    })
-
-   const pacienteInfo = document.querySelector('#pacienteInfo').textContent;
-   // console.log(agregarPrescripcionBtn);
 
 })
