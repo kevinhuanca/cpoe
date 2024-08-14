@@ -1,62 +1,180 @@
-include nav-admin.pug
+include navbar.pug
 
 .container.mt-4
    .row
-      .col-md-6
+      .col-md-4
          form#formu(action="", method="post")
-            h2.mb-4 Agregar medicamento
+            h2.mb-4#tituloMedicamento Agregar medicamento
 
-            .mb-3
-               label.form-label(for="") Nombre:
-               select#nombreSelect.form-select
-                  option(value="0") Seleccione un nombre
-                  each nombre in nombres
-                     option(value=nombre.id) #{nombre.nombregenerico}
-            .mb-3
-               label.form-label(for="") Concentracion:
-               select#concentracionSelect.form-select
-                  option(value="0") Seleccione una concentracion
-                  each concentracion in concentraciones
-                     option(value=concentracion.id) #{concentracion.nombre}
-            .mb-3
-               label.form-label(for="") Forma Farmaceutica:
-               select#formafarmaceuticaSelect.form-select
-                  option(value="0") Seleccione una forma farmaceutica
-                  each formafarmaceutica in formafarmaceuticas
-                     option(value=formafarmaceutica.id) #{formafarmaceutica.nombre}
-            .mb-4
-               label.form-label(for="") Presentacion:
-               select#presentacionSelect.form-select
-                  option(value="0") Seleccione una presentacion
-                  each presentacion in presentaciones
-                     option(value=presentacion.id) #{presentacion.nombre}
-            .mb-3
-               label.form-label(for="") Categoria:
-               select#categoriaSelect.form-select
-                  option(value="0") Seleccione una categoria
-                  each categoria in categorias
-                     option(value=categoria.id) #{categoria.nombre}
-            .mb-4
-               label.form-label(for="") Familia:
-               select#familiaSelect.form-select
-                  option(value="0") Seleccione una familia
-                  each familia in familias
-                     option(value=familia.id) #{familia.nombre}
+            .d-flex.mb-4
+               .input-group
+                  span.input-group-text Nombre:
+                  select#nombreSelect.form-select.me-1
+                     option(value="0") Seleccione
+                     each nombre in nombres
+                        option(value=nombre.id) #{nombre.nombregenerico}
+               button#agregarNombre.btn.btn-dark(type="button", data-bs-toggle="tooltip", data-bs-placement="right", data-bs-title="Agregar")
+                  i.bi-plus-lg
 
-            .mb-4
+            .d-flex.mb-4
+               .input-group
+                  span.input-group-text Concentracion:
+                  select#concentracionSelect.form-select.me-1
+                     option(value="0") Seleccione
+                     each concentracion in concentraciones
+                        option(value=concentracion.id) #{concentracion.nombre}
+               button#agregarConcentracion.btn.btn-dark(
+                  type="button",
+                  data-bs-toggle="tooltip",
+                  data-bs-placement="right",
+                  data-bs-title="Agregar"
+               )
+                  i.bi-plus-lg
+
+            .d-flex.mb-4
+               .input-group
+                  span.input-group-text Forma Farm:
+                  select#formafarmaceuticaSelect.form-select.me-1
+                     option(value="0") Seleccione
+                     each formafarmaceutica in formafarmaceuticas
+                        option(value=formafarmaceutica.id) #{formafarmaceutica.nombre}
+               button#agregarFormaFarmaceutica.btn.btn-dark(
+                  type="button",
+                  data-bs-toggle="tooltip",
+                  data-bs-placement="right",
+                  data-bs-title="Agregar"
+               )
+                  i.bi-plus-lg
+
+            .d-flex.mb-4
+               .input-group
+                  span.input-group-text Presentacion:
+                  select#presentacionSelect.form-select.me-1
+                     option(value="0") Seleccione
+                     each presentacion in presentaciones
+                        option(value=presentacion.id) #{presentacion.nombre}
+               button#agregarPresentacion.btn.btn-dark(
+                  type="button",
+                  data-bs-toggle="tooltip",
+                  data-bs-placement="right",
+                  data-bs-title="Agregar"
+               )
+                  i.bi-plus-lg
+
+            .d-flex.mb-4
+               .input-group
+                  span.input-group-text Categoria:
+                  select#categoriaSelect.form-select.me-1
+                     option(value="0") Seleccione
+                     each categoria in categorias
+                        option(value=categoria.id) #{categoria.nombre}
+               button#agregarCategoria.btn.btn-dark(
+                  type="button",
+                  data-bs-toggle="tooltip",
+                  data-bs-placement="right",
+                  data-bs-title="Agregar"
+               )
+                  i.bi-plus-lg
+
+            .d-flex.mb-4
+               .input-group
+                  span.input-group-text Familia:
+                  select#familiaSelect.form-select.me-1
+                     option(value="0") Seleccione
+                     each familia in familias
+                        option(value=familia.id) #{familia.nombre}
+               button#agregarFamilia.btn.btn-dark(
+                  type="button",
+                  data-bs-toggle="tooltip",
+                  data-bs-placement="right",
+                  data-bs-title="Agregar"
+               )
+                  i.bi-plus-lg
+
+            .d-grid
                button#agregarMedicamento.btn.btn-success(type="button") Agregar
+            .d-flex.mb-5
+               button#editarMedicamento.btn.btn-success.flex-fill.me-2.d-none(type="button") Guardar
+               button#cancelarMedicamento.btn.btn-danger.flex-fill.d-none(type="button") Cancelar
 
-      .col-md-6
+      .col-md-8
          h2.mb-4 Listado de medicamentos
 
-         .mb-3
-            label.form-label(for="") Buscar:
-            input#buscarMedicamento.form-control(type="text", placeholder="Buscar medicamento por nombre")
+         .mb-5
+            table#tablaMedicamentos.table.table-striped(style="width:100%")
+               thead
+                  tr
+                     th NOM.
+                     th CONC.
+                     th F. F.
+                     th PRES.
+                     th CATEG.
+                     th FAM.
+                     th ACCION
+               tbody
+                  each medicamento in medicamentos
+                     tr
+                        td #{medicamento.nombre}
+                        td #{medicamento.concentracion}
+                        td #{medicamento.formafarmaceutica}
+                        td #{medicamento.presentacion}
+                        td #{medicamento.categoria}
+                        td #{medicamento.familia}
+                        if medicamento.estado
+                           td
+                              button.btnEditar.btn.btn-sm.btn-primary(
+                                 data-id=medicamento.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="left",
+                                 data-bs-title="Editar"
+                              )
+                                 i.bi-pencil-square
+                              | 
+                              button.btnDesactivar.btn.btn-sm.btn-danger(
+                                 data-id=medicamento.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="right",
+                                 data-bs-title="Desactivar"
+                              )
+                                 i.bi-dash-square
+                        else
+                           td
+                              button.btnEditar.btn.btn-sm.btn-primary(
+                                 data-id=medicamento.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="left",
+                                 data-bs-title="Editar"
+                              )
+                                 i.bi-pencil-square
+                              | 
+                              button.btnActivar.btn.btn-sm.btn-success(
+                                 data-id=medicamento.id,
+                                 data-bs-toggle="tooltip",
+                                 data-bs-placement="right",
+                                 data-bs-title="Activar"
+                              )
+                                 i.bi-check2-square
 
-         .mb-4
-            #medicamentosInfo
-               each medicamento in medicamentos
-                  .alert.alert-success.mb-1(role="alert", data-id=medicamento.id)
-                     | #{medicamento.nombre} #{medicamento.concentracion} | #{medicamento.formafarmaceutica} x#{medicamento.presentacion}
+.modal.fade#modalMedicamento(data-bs-backdrop="static", data-bs-keyboard="false", tabindex="-1", aria-labelledby="staticBackdropLabel", aria-hidden="true")
+   .modal-dialog.modal-dialog-centered
+      .modal-content
+         .modal-header
+            h1.modal-title.fs-5.text-center#staticBackdropLabel CPOE
+         .modal-body#mensajeMedicamento
+            | ...
+         .modal-footer
+            button.btn.btn-dark(type="button", onclick="window.location.reload()") Aceptar
+
+.modal.fade#modalAgregar(tabindex="-1", aria-hidden="true")
+   .modal-dialog.modal-dialog-centered
+      .modal-content
+         .modal-header#modalHeader
+            h1.modal-title.fs-5.text-center CPOE
+            button.btn-close(type="button", data-bs-dismiss="modal", aria-label="Close")
+         .modal-body.m-3#modalBody
+         .modal-footer.d-flex.justify-content-center#modalFooter
+            button#botonAgregar.btn.btn-dark(type="button") Agregar
 
 script(src="./js/medicamento.js")
+
+include footer.pug
