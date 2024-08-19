@@ -33,7 +33,8 @@ include navbar.pug
                select#medicamentos.form-select
                   option(value="0" selected) Selecciona un medicamento
                   each medicamento in medicamentos
-                     option(value=medicamento.id) #{medicamento.nombre} #{medicamento.concentracion} #{medicamento.formafarmaceutica} x#{medicamento.presentacion}
+                     if medicamento.estado
+                        option(value=medicamento.id) #{medicamento.nombre} #{medicamento.concentracion} #{medicamento.formafarmaceutica} x#{medicamento.presentacion}
             .input-group.mb-3
                span.input-group-text Nombre comercial (opcional):
                input#nombreComercialInput.form-control(type="text", placeholder="Ej: Ibumac")
@@ -62,7 +63,8 @@ include navbar.pug
                select#prestaciones.form-select
                   option(value="0" selected) Selecciona una prestación
                   each prestacion in prestaciones
-                     option(value=prestacion.id) #{prestacion.nombre}
+                     if prestacion.estado
+                        option(value=prestacion.id) #{prestacion.nombre}
             .input-group.mb-3
                span.input-group-text Lado/zona (opcional):
                input#ladoInput.form-control(type="text", placeholder="Ej: Toráx, Cerebro")
@@ -88,7 +90,7 @@ include navbar.pug
                input#diagnosticoInput.form-control(type="text")
             
             .d-grid.mb-5
-               button#agregarPrescripcion.btn.btn-success(type="button", disabled) Guardar prescripcion y generar PDF
+               button#agregarPrescripcion.btn.btn-success(type="button", disabled) Guardar prescripcion
       
       .col-md-6
          h2.mb-3 Prescripciones anteriores
